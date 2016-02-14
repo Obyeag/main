@@ -23,7 +23,7 @@ ax.errorbar(bin_centres, counts, yerr=err, fmt='o')
 
 # fit to a gaussian function
 fitErrors = np.sqrt(counts+1.)
-initialGuess = [np.max(counts), 0., 1.]
+initialGuess = [np.max(counts), 6, 5]
 fittedParameters, covariance = optimize.curve_fit(fitFunction, bin_centres, counts, p0=initialGuess, sigma=fitErrors, maxfev=100000)
 [ fittedAmplitude, fittedMean, fittedSigma ] = fittedParameters
 
