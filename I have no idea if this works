@@ -1,0 +1,55 @@
+# -*- coding: utf-8 -*-
+"""
+Spyder Editor
+
+This is a temporary script file.
+"""
+import numpy as np
+from matplotlib import pyplot as pp
+import scipy.optimize as optimize
+import scipy.stats
+def fitFunction(x, a, b, c):
+     return a * np.exp(-b * x) + c
+fig = pp.figure()
+ax = fig.add_subplot(1,1,1)
+x = -6*np.log(np.random.random(100000))
+nBins=(max(x)-min(x))/2
+counts,bin_edges = np.histogram(x,nBins)
+bin_centres = (bin_edges[:-1] + bin_edges[1:])/2.
+err = np.sqrt(counts)
+s = np.random.poisson(5, len(counts))
+counts=counts+s
+ax.errorbar(bin_centres, counts, yerr=err, fmt='o')
+
+
+# fit to a gaussian function
+fitErrors = np.sqrt(counts+1.)
+initialGuess = [np.max(counts), 0., 1.]
+fittedParameters, covariance = optimize.curve_fit(fitFunction, bin_centres, counts, p0=initialGuess, sigma=fitErrors, maxfev=100000)
+[ fittedAmplitude, fittedMean, fittedSigma ] = fittedParameters
+
+# put the fitted curve values into an array and plot them
+fittedCurve = fitFunction(bin_centres, fittedAmplitude, fittedMean, fittedSigma) 
+
+errA = np.sqrt(covariance[0][0])
+errMu = np.sqrt(covariance[1][1])
+errSigma = np.sqrt(covariance[2][2])
+chisq = np.sum( ((counts-fittedCurve) / fitErrors)**2)
+ndof = nBins - 3
+pValue = 1. - scipy.stats.chi2.cdf(chisq,ndof)
+
+# comment out, since this line is not python 3.x compliant
+#print "chisq=" + str(chisq) +" ndof=" + str(ndof) + " pValue=" + str(pValue)
+
+
+textString = "$A={0:6.1f} \pm {1:4.1f}$ \n $\mu={2:8.3f} \pm {3:6.3f}$ \n $\sigma={4:8.3f} \pm {5:6.3f}$ ".format(
+    fittedAmplitude, errA, fittedMean, errMu, fittedSigma, errSigma)
+
+textString += "\n$\chi^2={0:5.1f}$  \n$p={1:8.5f}$".format(chisq, pValue) 
+ax.grid(True)
+
+ax.text(.5, 0.7*2.0*max(counts), textString, fontsize=16, verticalalignment='top')
+
+ax.plot(bin_centres, fittedCurve, 'r-', linewidth=1)
+ax.set_yscale('log')
+pp.show()
