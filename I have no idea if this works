@@ -33,7 +33,7 @@ print covariance
 errA = np.sqrt(covariance[0][0])
 errMu = np.sqrt(covariance[1][1])
 errSigma = np.sqrt(covariance[2][2])
-chisq = np.sum( ((counts-fittedCurve) / fitErrors)**2)
+chisq = np.sum( ((counts-fittedCurve) / fitErrors)**2)  
 ndof = nBins - 3
 pValue = 1. - scipy.stats.chi2.cdf(chisq,ndof)
 
@@ -47,7 +47,7 @@ textString = "$N_0={0:6.1f} \pm {1:4.1f}$ \n $\\tau={2:8.3f} \pm {3:6.3f}$ \n $B
 textString += "\n$\chi^2={0:5.1f}$  \n$p={1:8.5f}$".format(chisq, pValue) 
 ax.grid(True)
 
-ax.text(.5, 0.7*2.0*max(counts), textString, fontsize=16, verticalalignment='top')
+ax.text(33, 0.7*2.0*max(counts), textString, fontsize=16, verticalalignment='top')
 
 ax.plot(bin_centres, fittedCurve, 'r-', linewidth=1)
 ax.set_yscale('log')
