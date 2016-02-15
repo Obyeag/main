@@ -29,7 +29,6 @@ fittedParameters, covariance = optimize.curve_fit(fitFunction, bin_centres, coun
 
 # put the fitted curve values into an array and plot them
 fittedCurve = fitFunction(bin_centres, fittedAmplitude, fittedMean, fittedSigma) 
-print covariance
 errA = np.sqrt(covariance[0][0])
 errMu = np.sqrt(covariance[1][1])
 errSigma = np.sqrt(covariance[2][2])
