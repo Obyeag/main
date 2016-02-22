@@ -1,10 +1,8 @@
 import numpy as np
 from matplotlib import pyplot as pp
 import scipy.optimize as optimize
-import scipy.stats
-import math
 def fitFunction(x, v_0, f_0):
-    return np.sqrt(v_0**2/(x**2+f_0**2))
+    return np.sqrt((np.power(v_0,2)/(np.power(x,2)+np.power(f_0,2))))
 fig = pp.figure()
 ax = fig.add_subplot(1,1,1)
 x = np.loadtxt("OptTdata/01/yFreq.txt", comments="#", delimiter="\n", unpack=False)#np.loadtxt("OptTdata/01/Time.txt", comments="#", delimiter="\n", unpack=False) #-6*np.log(np.random.random(100000))
@@ -14,9 +12,9 @@ nBins=1000
 #countsy,biny = np.histogram(y,nBins)
 ax.plot(x, y)
 
-
 fitErrors = np.sqrt(y+1.)
-fittedParameters, covariance = optimize.curve_fit(fitFunction, x, y, sigma=fitErrors, maxfev=100000)
+initialGuess=[500,1000]
+fittedParameters, covariance = optimize.curve_fit(fitFunction, x, y, p0=initialGuess,sigma=fitErrors, maxfev=100000)
 [fittedAmplitude, fittedMean] = fittedParameters
 
 # put the fitted curve values into an array and plot them
