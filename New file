@@ -1,0 +1,29 @@
+import numpy as np
+from matplotlib import pyplot as pp
+import scipy.optimize as optimize
+import scipy.stats
+import math
+def fitFunction(x, v_0, f_0):
+    return np.sqrt(v_0**2/(x**2+f_0**2))
+fig = pp.figure()
+ax = fig.add_subplot(1,1,1)
+x = np.loadtxt("OptTdata/01/yFreq.txt", comments="#", delimiter="\n", unpack=False)#np.loadtxt("OptTdata/01/Time.txt", comments="#", delimiter="\n", unpack=False) #-6*np.log(np.random.random(100000))
+y = np.loadtxt("OptTdata/01/yPSD.txt", comments="#", delimiter="\n", unpack=False)
+nBins=1000
+#countsx,binx = np.histogram(x,nBins)
+#countsy,biny = np.histogram(y,nBins)
+ax.plot(x, y)
+
+
+fitErrors = np.sqrt(y+1.)
+fittedParameters, covariance = optimize.curve_fit(fitFunction, x, y, sigma=fitErrors, maxfev=100000)
+[fittedAmplitude, fittedMean] = fittedParameters
+
+# put the fitted curve values into an array and plot them
+fittedCurve = fitFunction(x, fittedAmplitude, fittedMean)
+ax.grid(True)
+ax.plot(x, fittedCurve, 'r-', linewidth=1)  
+
+ax.set_yscale('log')
+ax.set_xscale('log')
+pp.show()
