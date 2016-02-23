@@ -2,23 +2,22 @@ import numpy as np
 from matplotlib import pyplot as pp
 import scipy.optimize as optimize
 def fitFunction(x, v_0, f_0):
-    return np.sqrt((np.power(v_0,2)/(np.power(x,2)+np.power(f_0,2))))
+    return (v_0**2/(np.power(x,2)+f_0**2))
 fig = pp.figure()
 ax = fig.add_subplot(1,1,1)
 x = np.loadtxt("OptTdata/01/yFreq.txt", comments="#", delimiter="\n", unpack=False)#np.loadtxt("OptTdata/01/Time.txt", comments="#", delimiter="\n", unpack=False) #-6*np.log(np.random.random(100000))
-y = np.loadtxt("OptTdata/01/yPSD.txt", comments="#", delimiter="\n", unpack=False)
-nBins=1000
+y = np.loadtxt("OptTdata/01/yPSD.txt", comments="#", delimiter="\n", unpack=False)*10**8
 #countsx,binx = np.histogram(x,nBins)
 #countsy,biny = np.histogram(y,nBins)
-ax.plot(x, y)
+ax.plot(x, y/10**8)
 
 fitErrors = np.sqrt(y+1.)
-initialGuess=[500,1000]
-fittedParameters, covariance = optimize.curve_fit(fitFunction, x, y, p0=initialGuess,sigma=fitErrors, maxfev=100000)
+fittedParameters, covariance = optimize.curve_fit(fitFunction, x, y,sigma=fitErrors, maxfev=1000000000)
 [fittedAmplitude, fittedMean] = fittedParameters
-
+print fittedAmplitude,fittedMean
 # put the fitted curve values into an array and plot them
-fittedCurve = fitFunction(x, fittedAmplitude, fittedMean)
+fittedCurve = fitFunction(x, fittedAmplitude, fittedMean)/10**8
+#fittedCurve = fitFunction(x, 1000., 1000)/10**8
 ax.grid(True)
 ax.plot(x, fittedCurve, 'r-', linewidth=1)  
 
