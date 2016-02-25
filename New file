@@ -5,10 +5,8 @@ def fitFunction(x, v_0, f_0):
     return (v_0**2/(np.power(x,2)+f_0**2))
 fig = pp.figure()
 ax = fig.add_subplot(1,1,1)
-x = np.loadtxt("OptTdata/01/yFreq.txt", comments="#", delimiter="\n", unpack=False)#np.loadtxt("OptTdata/01/Time.txt", comments="#", delimiter="\n", unpack=False) #-6*np.log(np.random.random(100000))
+x = np.loadtxt("OptTdata/01/yFreq.txt", comments="#", delimiter="\n", unpack=False)
 y = np.loadtxt("OptTdata/01/yPSD.txt", comments="#", delimiter="\n", unpack=False)*10**8
-#countsx,binx = np.histogram(x,nBins)
-#countsy,biny = np.histogram(y,nBins)
 ax.plot(x, y/10**8)
 
 fitErrors = np.sqrt(y+1.)
