@@ -2,17 +2,18 @@ import numpy as np
 from matplotlib import pyplot as pp
 from scipy.optimize import curve_fit
 import math
+import bisect
 fig = pp.figure()
 ax = fig.add_subplot(1,1,1)
-d=10
-x = np.loadtxt("HeeJae/HeeJaeSam"+str(d)+".txt", comments="#", skiprows=2,usecols=(0,))
-y = np.loadtxt("HeeJae/HeeJaeSam"+str(d)+".txt", comments="#", skiprows=2,usecols=(1,))
-ax.plot(x,y)
-print np.var(y)
-
-#Variance be like wtf yo
-y-=min(y)
-y1=y/sum(y)
-print sum(y1*(x**2))-sum(y1*x)**2
-print sum(y1*x)
-print np.var(x)
+d1=np.array([10,12,16,20,24])
+sig2=()
+interval=0.7
+for d in d1:
+    x = np.loadtxt("HeeJae/HeeJaeSam"+str(d)+".txt", comments="#", skiprows=2,usecols=(0,))
+    y = np.loadtxt("HeeJae/HeeJaeSam"+str(d)+".txt", comments="#", skiprows=2,usecols=(1,))
+    z=sum(x*y/sum(y))
+    bounds=[bisect.bisect(x,z-interval/2),bisect.bisect(x,z+interval/2)]
+    y-=min(y[bounds[0]:bounds[1]])
+    y1=y[bounds[0]:bounds[1]]/sum(y[bounds[0]:bounds[1]])
+    sig2+=(sum(y1*(x[bounds[0]:bounds[1]]**2))-sum(y1*x[bounds[0]:bounds[1]])**2,)
+ax.plot(d1**2,sig2)
