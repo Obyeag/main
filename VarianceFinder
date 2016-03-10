@@ -1,0 +1,11 @@
+import numpy as np
+from matplotlib import pyplot as pp
+from scipy.optimize import curve_fit
+import math
+fig = pp.figure()
+ax = fig.add_subplot(1,1,1)
+d=10
+x = np.loadtxt("HeeJae/HeeJaeSam"+str(d)+".txt", comments="#", skiprows=2,usecols=(0,))
+y = np.loadtxt("HeeJae/HeeJaeSam"+str(d)+".txt", comments="#", skiprows=2,usecols=(1,))
+ax.plot(x,y)
+print np.var(y)
