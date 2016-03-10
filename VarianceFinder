@@ -9,3 +9,10 @@ x = np.loadtxt("HeeJae/HeeJaeSam"+str(d)+".txt", comments="#", skiprows=2,usecol
 y = np.loadtxt("HeeJae/HeeJaeSam"+str(d)+".txt", comments="#", skiprows=2,usecols=(1,))
 ax.plot(x,y)
 print np.var(y)
+
+#Variance be like wtf yo
+y-=min(y)
+y1=y/sum(y)
+print sum(y1*(x**2))-sum(y1*x)**2
+print sum(y1*x)
+print np.var(x)
