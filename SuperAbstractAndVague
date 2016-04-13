@@ -1,0 +1,10 @@
+import numpy as np
+names=("blah","blahblah","blahblahblah")
+d1=("1","2","3")
+temp=np.zeros(x.shape())
+for n in names:
+    x = np.loadtxt(n+"1.jpg", comments="#", usecols=(0,))
+    for d in d1:
+        y = np.loadtxt(n+d+".jpg", comments="#", usecols=(1,))
+        temp+=y
+avg=sum(temp)/len(temp)/len(d1)/len(names)
