@@ -1,0 +1,130 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+import java.awt.*;
+import javax.swing.*;
+
+/**
+ *
+ * @author Sean
+ */
+public class Buddhbrot {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        
+        JFrame king = new JFrame();
+        king.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mypanel yo = new mypanel();
+        
+        yo.setup();
+        
+        king.add(yo);
+
+        king.pack();
+        king.setVisible(true);
+        int count = 0;
+        while (count < 5000) {
+            yo.change();
+            //count++;
+        }
+        System.out.println("sh*t");
+    }
+}
+
+class mypanel extends JPanel {
+
+    int xDim = 1300;
+    int yDim = 700;
+    double zoom=200;
+    double coordx=0;
+    double coordy=0;
+    //double zoom=2000;
+    //double coordx=777*zoom;
+    //double coordy=0;
+    //double zoom = 2000 * 30;
+    //double coordx = -0.75 * zoom;//700
+    //double coordy = -.1 * zoom;
+    //double zoom = 60000;
+    //double coordx = -0.1002 * zoom;//700
+    //double coordy = 0.8383 * zoom;
+    double[][] plane = new double[xDim][yDim];
+    double watx;
+    double waty;
+
+    public void setup() {
+        for (int x = 0; x < xDim; x++) {
+            for (int y = 0; y < yDim; y++) {
+                plane[x][y] = 255/5;
+            }
+        }
+    }
+    public double recurse(int n, double x, double y){
+        double px = y;
+        double py = x;
+        y = (px * px - py * py)+waty;
+        x = (2 * py * px)+watx;
+        if(n==0) return (x*x+y*y);
+        return recurse(n-1,x,y);
+    }
+    
+    public void change() {
+                int screenx=(int)(Math.random()*xDim);
+                int screeny=(int)(Math.random()*yDim);
+                double gridx=(screenx - xDim / 2.0 + coordx) / zoom;
+                double gridy=(screeny - yDim / 2.0 + coordy) / zoom;
+                int n=1;
+                watx=gridx;
+                waty=gridy;
+                double dist=recurse(n,gridx,gridy);
+                if(dist<=2){
+                    plane[screenx][screeny]=255;
+                    for (int x = 0; x < xDim; x++){
+                        for (int y = 0; y < yDim; y++){
+                            if(plane[x][y]+(int)(300/Math.sqrt((x-screenx)*(x-screenx)+(y-screeny)*(y-screeny)))<255){
+                                plane[x][y]+=(int)(100/Math.sqrt((x-screenx)*(x-screenx)+(y-screeny)*(y-screeny)));
+                            }else{
+                                plane[x][y]=255;
+                            }
+                        }}
+                    
+                }else{
+                    plane[screenx][screeny]=0;
+                    for (int x = 0; x < xDim; x++){
+                        for (int y = 0; y < yDim; y++){
+                            if(plane[x][y]-(int)(300/Math.sqrt((x-screenx)*(x-screenx)+(y-screeny)*(y-screeny)))>0){
+                                plane[x][y]-=(int)(300/Math.sqrt((x-screenx)*(x-screenx)+(y-screeny)*(y-screeny)));
+                            }else{
+                                plane[x][y]=0;
+                            }
+                        }}
+                }
+                repaint();
+            }     
+    
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        for (int x = 0; x < xDim; x++) {
+            for (int y = 0; y < yDim; y++) {
+
+                //try{
+                    g.setColor(new Color((int)plane[x][y],(int)plane[x][y],(int)plane[x][y]));
+                    g.fillRect(x, y, 1, 1);
+                }
+                //}catch(NullPointerException e){  
+                //}
+            }
+        }
+
+
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(xDim, yDim);
+    }
+}
