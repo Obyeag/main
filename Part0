@@ -1,6 +1,0 @@
-datafile = file('C:\Users\seana_000\Documents\Downloads\shuf_words.txt')
-for line in datafile:
-    #if ('cake' in line):
-    #if ('ii' in line):
-    if ('cat' in line) and ((line[0]=='e') or (line[0]=='i') or (line[0]=='o') or (line[0]=='u') or (line[0]=='a')):
-        print line,
