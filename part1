@@ -1,0 +1,20 @@
+import re
+datafile = file('D:\Sean\'s Stuff\Documents\Downloads\hw2_data.txt')
+counter=0
+for line in datafile:
+    counter=counter+1
+    if(counter % 2)==1:       
+        X=filter(None, re.split(r'_', line))
+        if(len(X)>4): X[1:3]=['_'.join(X[1:3])]
+        [Genus,Species,Sample_num,Country]=X
+        
+        Genus=">"+re.findall("[A-Z]",Genus)[0]+"."
+
+        if(Species == "sp._1"): Species='alacalufi'
+        if(Species == "sp.9"):  Species='meloi'
+        Species=re.split(r'_', Species)[0]
+
+        Country=Country[0:3]
+        print Genus+"_"+Species+"_"+Sample_num+"_"+Country
+    else:
+        print line.upper()
