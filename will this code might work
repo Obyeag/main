@@ -1,0 +1,17 @@
+import re
+datafile = file('D:\Sean\'s Stuff\Documents\Downloads\sequence.fasta')
+file_object  = open('D:\Sean\'s Stuff\Documents\Downloads\\sequence2.fasta', 'w')
+counter=0
+for line in datafile:
+    counter=counter+1
+    if(line[0]==">"):      
+        X=re.split('\\|', line)
+        print X
+        [A,geneid,B,accession,wat]=X
+        accession=re.split("_",accession)[1]
+        taxon=re.split(" ",wat)[1]
+        file_object.write(">"+accession+"_"+geneid+"_"+taxon+"\n")
+        print ">"+accession+"_"+geneid+"_"+taxon+"\n"
+    else:
+        file_object.write(line)
+        print line
